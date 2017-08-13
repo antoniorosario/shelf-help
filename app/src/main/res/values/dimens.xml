@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  sizes of list item  in search view  view-->
+    <dimen name="list_item_height">88dp</dimen>
+
+    <!--  fab elevation-->
+    <dimen name="elevation_fab">4dp</dimen>
+
+    <!--  sizes of book cover in book detail view-->
+    <dimen name="width_book_cover_image">100dp</dimen>
+    <dimen name="height_book_cover_image">140dp</dimen>
+
+    <!--  sizes of book empty state  -->
+    <dimen name="height_empty_state_image">200dp</dimen>
+    <dimen name="width_empty_state_image">200dp</dimen>
+    <!--  sizes of book search icon in search view -->
+    <dimen name="width_search_icon">100dp</dimen>
+    <dimen name="height_search_icon">100dp</dimen>
+
+    <!--  sizes of book image grid header logo -->
+    <dimen name="width_book_grid">100dp</dimen>
+    <dimen name="height_book_grid">100dp</dimen>
+
+    <!--  sizes of navigation header logo -->
+    <dimen name="width_nav_header_logo">50dp</dimen>
+    <dimen name="height_nav_header_logo">50dp</dimen>
+
+    <!-- typical spacing between two views -->
+    <dimen name="spacing_none">0dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+
+    <!-- font sizes -->
+    <dimen name="font_medium">18sp</dimen>
+    <dimen name="font_small">14sp</dimen>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Array for shelf options to add a book-->
+    <string-array name="array_book_status_options">
+        <item>@string/books_to_read</item>
+        <item>@string/currently_reading</item>
+        <item>@string/books_read</item>
+    </string-array>
+</resources>
