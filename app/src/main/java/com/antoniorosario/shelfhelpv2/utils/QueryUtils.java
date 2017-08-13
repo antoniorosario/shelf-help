@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import com.antoniorosario.shelfhelpv2.models.Book;
 
 import org.json.JSONArray;

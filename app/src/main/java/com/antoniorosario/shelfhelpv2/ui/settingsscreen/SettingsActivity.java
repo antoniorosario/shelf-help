@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import com.antoniorosario.shelfhelpv2.SingleFragmentActivity;
 
 
-public class SettingsActivity extends SingleFragmentActivity{
+public class SettingsActivity extends SingleFragmentActivity {
 
     public static Intent newIntent(Context packageContext) {
         return new Intent(packageContext, SettingsActivity.class);

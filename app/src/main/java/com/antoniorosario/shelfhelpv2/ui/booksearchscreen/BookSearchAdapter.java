@@ -25,6 +25,42 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Bo
         this.context = context;
     }
 
+    @Override
+    public BookHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.search_list_item, parent, false);
+        return new BookHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(BookHolder holder, int position) {
+        Book book = books.get(position);
+        holder.bindBook(book);
+    }
+
+    @Override
+    public int getItemCount() {
+        return books.size();
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public void clear() {
+        int size = books.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                books.remove(0);
+            }
+            this.notifyItemRangeRemoved(0, size);
+        }
+    }
+
+    private Book getItem(int position) {
+        return books.get(position);
+    }
+
     //TODO look into potential memory leaks by keeping this class non-static
     public class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -61,40 +97,5 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Bo
                     .fit()
                     .into(bookCoverImage);
         }
-    }
-    @Override
-    public BookHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.search_list_item, parent, false);
-        return new BookHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(BookHolder holder, int position) {
-        Book book = books.get(position);
-        holder.bindBook(book);
-    }
-
-    @Override
-    public int getItemCount() {
-        return books.size();
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public void clear() {
-        int size = books.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                books.remove(0);
-            }
-            this.notifyItemRangeRemoved(0, size);
-        }
-    }
-
-    private Book getItem(int position) {
-        return books.get(position);
     }
 }

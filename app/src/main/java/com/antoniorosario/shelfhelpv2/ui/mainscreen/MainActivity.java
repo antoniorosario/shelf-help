@@ -27,7 +27,7 @@ import com.antoniorosario.shelfhelpv2.ui.settingsscreen.SettingsActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.antoniorosario.shelfhelpv2.database.ShelfHelpContract.*;
+import static com.antoniorosario.shelfhelpv2.database.ShelfHelpContract.BookEntry;
 
 public class MainActivity extends AppCompatActivity {
 

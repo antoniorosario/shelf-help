@@ -46,12 +46,10 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     @BindView(R.id.retry_query_button) ImageButton retryQueryButton;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.book_search_list) RecyclerView searchRecyclerView;
-
+    @State String query;
     private SearchView searchView;
     private BookSearchAdapter bookSearchAdapter;
     private Uri.Builder uriBuilder;
-
-    @State String query;
 
     public static BookSearchFragment newInstance() {
         return new BookSearchFragment();

@@ -31,6 +31,18 @@ public class BookShelfCursorAdapter extends CursorRecyclerViewAdapter<BookShelfC
         this.cursor = cursor;
     }
 
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.shelf_grid_item, parent, false);
+        return new ViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
+        viewHolder.bind(cursor);
+    }
+
     //TODO look into potential memory leaks by keeping this class non-static
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.grid_book_cover_image) ImageView bookCoverImageView;
@@ -59,17 +71,5 @@ public class BookShelfCursorAdapter extends CursorRecyclerViewAdapter<BookShelfC
                     .fit()
                     .into(bookCoverImageView);
         }
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.shelf_grid_item, parent, false);
-        return new ViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
-        viewHolder.bind(cursor);
     }
 }
