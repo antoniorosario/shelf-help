@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.antoniorosario.shelfhelpv2.R;
 import com.antoniorosario.shelfhelpv2.models.Book;
+import com.antoniorosario.shelfhelpv2.receiver.ConnectivityReceiver;
 import com.antoniorosario.shelfhelpv2.utils.QueryUtils;
 
 import java.util.List;
@@ -131,7 +132,7 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         loadingIndicator.setVisibility(View.VISIBLE);
 
         // Check whether or not there is an active network connection
-        if (QueryUtils.hasActiveNetwork(getActivity())) {
+        if (ConnectivityReceiver.isConnected()) {
             // Search submitted with an active connection
             showSuccessfulSearchView();
             // Fetch the data remotely
@@ -150,7 +151,7 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     public boolean onQueryTextChange(String newText) {
         this.query = newText;
         // Let the user know they don't have an active network connection while typing, else resume search
-        if (!QueryUtils.hasActiveNetwork(getActivity())) {
+        if (!(ConnectivityReceiver.isConnected())) {
             showDeviceIsOfflineView();
         } else {
             bookSearchAdapter.clear();
