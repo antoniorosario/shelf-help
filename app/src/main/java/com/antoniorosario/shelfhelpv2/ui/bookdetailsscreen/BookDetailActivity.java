@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 
-import com.antoniorosario.shelfhelpv2.SingleFragmentActivity;
+import com.antoniorosario.shelfhelpv2.ui.SingleFragmentActivity;
 import com.antoniorosario.shelfhelpv2.models.Book;
 
 import org.parceler.Parcels;

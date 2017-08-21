@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.antoniorosario.shelfhelpv2.SingleFragmentActivity;
+import com.antoniorosario.shelfhelpv2.ui.SingleFragmentActivity;
 
 
 public class SettingsActivity extends SingleFragmentActivity {

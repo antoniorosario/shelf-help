@@ -1,9 +1,11 @@
-package com.antoniorosario.shelfhelpv2;
+package com.antoniorosario.shelfhelpv2.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.antoniorosario.shelfhelpv2.R;
 
 /**
  * Reusable class for activities that hold a single fragment
