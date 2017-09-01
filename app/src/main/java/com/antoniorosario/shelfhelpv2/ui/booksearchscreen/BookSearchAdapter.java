@@ -34,7 +34,7 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Bo
 
     @Override
     public void onBindViewHolder(BookHolder holder, int position) {
-        Book book = books.get(position);
+        Book book = getItem(position);
         holder.bindBook(book);
     }
 
