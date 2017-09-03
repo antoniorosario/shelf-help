@@ -34,6 +34,7 @@ import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 
+
 public class BookSearchFragment extends Fragment implements SearchView.OnQueryTextListener, BookSearchView {
     private static final String BASE_BOOKS_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?key=AIzaSyA9wJxYq_xwO2G8GFInxR1UqubGa5x24Lw";
