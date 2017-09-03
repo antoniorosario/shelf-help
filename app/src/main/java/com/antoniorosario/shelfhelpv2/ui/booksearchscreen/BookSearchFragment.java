@@ -1,7 +1,6 @@
 package com.antoniorosario.shelfhelpv2.ui.booksearchscreen;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,8 +24,7 @@ import android.widget.TextView;
 
 import com.antoniorosario.shelfhelpv2.R;
 import com.antoniorosario.shelfhelpv2.models.Book;
-import com.antoniorosario.shelfhelpv2.receiver.ConnectivityReceiver;
-import com.antoniorosario.shelfhelpv2.utils.QueryUtils;
+import com.antoniorosario.shelfhelpv2.utils.ConnectivityUtils;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 
-public class BookSearchFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class BookSearchFragment extends Fragment implements SearchView.OnQueryTextListener, BookSearchView {
     private static final String BASE_BOOKS_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?key=AIzaSyA9wJxYq_xwO2G8GFInxR1UqubGa5x24Lw";
 
@@ -47,10 +45,12 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     @BindView(R.id.retry_query_button) ImageButton retryQueryButton;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.book_search_list) RecyclerView searchRecyclerView;
-    @State String query;
+
     private SearchView searchView;
     private BookSearchAdapter bookSearchAdapter;
     private Uri.Builder uriBuilder;
+    private BookSearchPresenter bookSearchPresenter;
+    @State String query;
 
     public static BookSearchFragment newInstance() {
         return new BookSearchFragment();
@@ -59,9 +59,12 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         Uri baseUri = Uri.parse(BASE_BOOKS_REQUEST_URL);
         uriBuilder = baseUri.buildUpon();
         bookSearchAdapter = new BookSearchAdapter(getActivity());
+        bookSearchPresenter = new BookSearchPresenter();
+        bookSearchPresenter.setView(this);
     }
 
     @Nullable
@@ -73,7 +76,6 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
 
         setHasOptionsMenu(true);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-
 
         activity.setSupportActionBar(toolbar);
         if (activity.getSupportActionBar() != null) {
@@ -127,16 +129,21 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bookSearchPresenter.setView(null);
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
         uriBuilder.appendQueryParameter("q", query);
         loadingIndicator.setVisibility(View.VISIBLE);
 
         // Check whether or not there is an active network connection
-        if (ConnectivityReceiver.isConnected()) {
+        if (ConnectivityUtils.isConnected(getActivity())) {
             // Search submitted with an active connection
-            showSuccessfulSearchView();
             // Fetch the data remotely
-            new BookSearchFragment.BooksAsyncTask().execute(uriBuilder.toString());
+            bookSearchPresenter.executeTask(uriBuilder.toString());
         } else {
             // Search submitted without an active connection
             showOfflineSearchView();
@@ -151,7 +158,7 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     public boolean onQueryTextChange(String newText) {
         this.query = newText;
         // Let the user know they don't have an active network connection while typing, else resume search
-        if (!(ConnectivityReceiver.isConnected())) {
+        if (!(ConnectivityUtils.isConnected(getActivity()))) {
             showDeviceIsOfflineView();
         } else {
             bookSearchAdapter.clear();
@@ -166,7 +173,8 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         onQueryTextSubmit(query);
     }
 
-    private void showActiveSearch() {
+    @Override
+    public void showActiveSearch() {
         searchIcon.setVisibility(View.VISIBLE);
         searchTitleTextView.setText(getString(R.string.search_active_string_title));
         searchSubtitleTextView.setText(getString(R.string.search_active_state_string_subtitle));
@@ -175,14 +183,28 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         loadingIndicator.setVisibility(View.GONE);
     }
 
-    private void showSuccessfulSearchView() {
+    @Override
+    public void showSuccessfulSearchView(List<Book> data) {
         searchIcon.setVisibility(View.GONE);
         searchSubtitleTextView.setText("");
         searchTitleTextView.setText("");
+        loadingIndicator.setVisibility(View.GONE);
         retryQueryButton.setVisibility(View.GONE);
+        bookSearchAdapter.clear();
+
+        if (data != null && !data.isEmpty()) {
+            // If we have a list of books add it to the adapter
+            bookSearchAdapter.setBooks(data);
+            bookSearchAdapter.notifyDataSetChanged();
+        } else {
+            // If a users search did not return searchResults let them know
+            searchTitleTextView.setText(R.string.search_no_results_title_text);
+            searchSubtitleTextView.setText("");
+        }
     }
 
-    private void showOfflineSearchView() {
+    @Override
+    public void showOfflineSearchView() {
         bookSearchAdapter.clear();
         loadingIndicator.setVisibility(View.GONE);
         searchIcon.setVisibility(View.GONE);
@@ -191,7 +213,8 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         retryQueryButton.setVisibility(View.VISIBLE);
     }
 
-    private void showDeviceIsOfflineView() {
+    @Override
+    public void showDeviceIsOfflineView() {
         bookSearchAdapter.clear();
         loadingIndicator.setVisibility(View.GONE);
         searchIcon.setVisibility(View.GONE);
@@ -200,34 +223,10 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         retryQueryButton.setVisibility(View.GONE);
     }
 
-    private class BooksAsyncTask extends AsyncTask<String, Void, List<Book>> {
-        @Override
-        protected List<Book> doInBackground(String... urls) {
-            // Don't perform the request if there are no URLs, or the first URL is null
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
-
-            List<Book> result = QueryUtils.fetchBookData(urls[0]);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(List<Book> data) {
-            searchIcon.setVisibility(View.GONE);
-            loadingIndicator.setVisibility(View.GONE);
-
-            bookSearchAdapter.clear();
-
-            if (data != null && !data.isEmpty()) {
-                // If we have a list of books add it to the adapter
-                bookSearchAdapter.setBooks(data);
-                bookSearchAdapter.notifyDataSetChanged();
-            } else {
-                // If a users search did not return searchResults let them know
-                searchTitleTextView.setText(R.string.search_no_results_title_text);
-                searchSubtitleTextView.setText("");
-            }
-        }
+    @Override
+    public void showSearchingView() {
+        searchIcon.setVisibility(View.GONE);
+        searchSubtitleTextView.setText("");
+        searchTitleTextView.setText("");
     }
 }
