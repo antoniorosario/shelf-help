@@ -21,10 +21,12 @@ import com.antoniorosario.shelfhelpv2.database.ShelfHelpContract.BookEntry;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BookShelfFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BookShelfFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, BookShelfView {
 
     private static final String BOOK_STATUS = "BOOK_STATUS";
     private static final int BOOK_LOADER_ID = 0;
+    private static final int PORTRAIT_SPAN_COUNT = 4;
+    private static final int LANDSCAPE_SPAN_COUNT = 7;
 
     @BindView(R.id.shelf_book_grid) RecyclerView bookShelf;
     @BindView(R.id.shelf_empty_view) RelativeLayout emptyView;
@@ -61,9 +63,9 @@ public class BookShelfFragment extends Fragment implements LoaderManager.LoaderC
         ButterKnife.bind(this, view);
 
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            bookShelf.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+            bookShelf.setLayoutManager(new GridLayoutManager(getActivity(), PORTRAIT_SPAN_COUNT));
         } else {
-            bookShelf.setLayoutManager(new GridLayoutManager(getActivity(), 7));
+            bookShelf.setLayoutManager(new GridLayoutManager(getActivity(), LANDSCAPE_SPAN_COUNT));
         }
 
         bookShelf.setHasFixedSize(true);
@@ -97,16 +99,21 @@ public class BookShelfFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        loadBooks(loader, data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        bookShelfCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void loadBooks(Loader<Cursor> loader, Cursor data) {
         if (data == null || !(data.getCount() > 0)) {
             emptyView.setVisibility(View.VISIBLE);
         } else {
             emptyView.setVisibility(View.GONE);
         }
         bookShelfCursorAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        bookShelfCursorAdapter.swapCursor(null);
     }
 }
