@@ -39,8 +39,7 @@
         <activity
             android:name="com.antoniorosario.shelfhelpv2.ui.booksearchscreen.BookSearchActivity"
             android:launchMode="singleTop"
-            android:parentActivityName="com.antoniorosario.shelfhelpv2.ui.mainscreen.MainActivity"
-            android:screenOrientation="portrait">
+            android:parentActivityName="com.antoniorosario.shelfhelpv2.ui.mainscreen.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.antoniorosario.shelfhelpv2.ui.mainscreen.MainActivity"/>

@@ -26,18 +26,21 @@ import com.antoniorosario.shelfhelpv2.R;
 import com.antoniorosario.shelfhelpv2.models.Book;
 import com.antoniorosario.shelfhelpv2.utils.ConnectivityUtils;
 
+import org.parceler.Parcels;
+
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import icepick.Icepick;
-import icepick.State;
 
 
 public class BookSearchFragment extends Fragment implements SearchView.OnQueryTextListener, BookSearchView {
     private static final String BASE_BOOKS_REQUEST_URL =
             "https://www.googleapis.com/books/v1/volumes?key=AIzaSyA9wJxYq_xwO2G8GFInxR1UqubGa5x24Lw";
+    private static final String QUERY_STRING = "QUERY_STRING";
+    private static final String LIST_OF_BOOKS = "LIST_OF_BOOKS";
 
     @BindView(R.id.loading_indicator) ProgressBar loadingIndicator;
     @BindView(R.id.search_title_text) TextView searchTitleTextView;
@@ -51,7 +54,8 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     private BookSearchAdapter bookSearchAdapter;
     private Uri.Builder uriBuilder;
     private BookSearchPresenter bookSearchPresenter;
-    @State String query;
+    private String query;
+    private List<Book> bookList = Collections.emptyList();
 
     public static BookSearchFragment newInstance() {
         return new BookSearchFragment();
@@ -60,6 +64,7 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setRetainInstance(true);
         Uri baseUri = Uri.parse(BASE_BOOKS_REQUEST_URL);
         uriBuilder = baseUri.buildUpon();
@@ -71,11 +76,18 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
 
         setHasOptionsMenu(true);
+
+        if (bookList == null || bookList.isEmpty()) {
+            showActiveSearch();
+        }
+
+        if (savedInstanceState != null) {
+            query = savedInstanceState.getString(QUERY_STRING);
+        }
         AppCompatActivity activity = (AppCompatActivity) getActivity();
 
         activity.setSupportActionBar(toolbar);
@@ -91,22 +103,6 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
 
         searchRecyclerView.setAdapter(bookSearchAdapter);
         return view;
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            Icepick.restoreInstanceState(this, savedInstanceState);
-        }
-    }
-
-    //TODO Save state of recyclerview and remove screen orientation attribute in manifest
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
     }
 
     @Override
@@ -129,6 +125,15 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
     }
 
+    //TODO Save state of recyclerview and remove screen orientation attribute in manifest
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(QUERY_STRING, query);
+        outState.putParcelable(LIST_OF_BOOKS, Parcels.wrap(bookList));
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -138,8 +143,6 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public boolean onQueryTextSubmit(String query) {
         uriBuilder.appendQueryParameter("q", query);
-        loadingIndicator.setVisibility(View.VISIBLE);
-
         // Check whether or not there is an active network connection
         if (ConnectivityUtils.isConnected(getActivity())) {
             // Search submitted with an active connection
@@ -185,17 +188,17 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     }
 
     @Override
-    public void showSuccessfulSearchView(List<Book> data) {
+    public void showSuccessfulSearchView(List<Book> bookList) {
+        this.bookList = bookList;
         searchIcon.setVisibility(View.GONE);
         searchSubtitleTextView.setText("");
         searchTitleTextView.setText("");
         loadingIndicator.setVisibility(View.GONE);
         retryQueryButton.setVisibility(View.GONE);
-        bookSearchAdapter.clear();
 
-        if (data != null && !data.isEmpty()) {
+        if (bookList != null && !bookList.isEmpty()) {
             // If we have a list of books add it to the adapter
-            bookSearchAdapter.setBooks(data);
+            bookSearchAdapter.setBooks(bookList);
             bookSearchAdapter.notifyDataSetChanged();
         } else {
             // If a users search did not return searchResults let them know
@@ -226,6 +229,7 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public void showSearchingView() {
+        loadingIndicator.setVisibility(View.VISIBLE);
         searchIcon.setVisibility(View.GONE);
         searchSubtitleTextView.setText("");
         searchTitleTextView.setText("");
