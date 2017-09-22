@@ -41,6 +41,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:contentDescription="@null"
+            android:visibility="invisible"
             android:src="@drawable/ic_empty_search_image"/>
 
         <TextView
@@ -52,7 +53,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:paddingTop="@dimen/spacing_normal"
-            android:text="@string/search_active_string_title"/>
+            tools:text="@string/search_active_string_title"/>
 
         <TextView
             android:id="@+id/search_subtitle_text"
@@ -63,7 +64,7 @@
             android:layout_centerHorizontal="true"
             android:paddingBottom="@dimen/spacing_normal"
             android:paddingTop="@dimen/spacing_small"
-            android:text="@string/search_active_state_string_subtitle"/>
+            tools:text="@string/search_active_state_string_subtitle"/>
 
         <ImageButton
             android:id="@+id/retry_query_button"
