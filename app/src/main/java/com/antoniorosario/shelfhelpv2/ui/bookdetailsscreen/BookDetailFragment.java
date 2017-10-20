@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 
 import static com.antoniorosario.shelfhelpv2.database.ShelfHelpContract.BookEntry;
 
-public class BookDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BookDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, BookDetailView {
     private static final String ARG_BOOK = "ARG_BOOK";
     private static final String ARG_BOOK_URI = "ARG_BOOK_URI";
     private static final String DIALOG_ADD = "DIALOG_ADD";
@@ -52,6 +52,7 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
+    private BookDetailPresenter bookDetailPresenter;
     private ShelfHelpDataSource dataSource;
     private Book currentBook;
     private Uri currentBookUri;
@@ -77,6 +78,8 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
         dataSource = new ShelfHelpDataSource(getActivity());
         currentBook = Parcels.unwrap(getArguments().getParcelable(ARG_BOOK));
         currentBookUri = Parcels.unwrap(getArguments().getParcelable(ARG_BOOK_URI));
+        bookDetailPresenter = new BookDetailPresenter();
+        bookDetailPresenter.setView(this);
     }
 
     @Nullable
@@ -105,12 +108,12 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    shareBook();
+                    bookDetailPresenter.shareBook();
                 }
             });
         } else {
             //Set up the UI for a book we selected from a search
-            setBookData(currentBook);
+            bookDetailPresenter.loadBook(currentBook);
 
             String uri = "@drawable/ic_action_add_book";
             fab.setImageResource(getResources().getIdentifier(uri, null, getActivity().getPackageName()));
@@ -118,7 +121,7 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
                 @Override
                 public void onClick(View view) {
                     //Show dialog to ask the user where they want to save their book to.
-                    showAddBookDialog();
+                    bookDetailPresenter.addBook();
                 }
             });
         }
@@ -198,16 +201,17 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
 
         if (cursor.moveToFirst()) {
             Book book = dataSource.getBookInfo(cursor);
-            setBookData(book);
+            bookDetailPresenter.loadBook(book);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        resetLoader();
+        bookDetailPresenter.resetBookData();
     }
 
-    private void resetLoader() {
+    @Override
+    public void clearBookData() {
         bookTitleTextView.setText("");
         authorNameTextView.append("");
         subtitleTextView.setText("");
@@ -217,7 +221,8 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
         bookCoverImageView.setImageResource(android.R.color.transparent);
     }
 
-    private void setBookData(Book book) {
+    @Override
+    public void showBook(Book book) {
         subtitleTextView.setText(book.getSubtitle());
         bookTitleTextView.setText(book.getTitle());
         descriptionTextView.setText(book.getDescription());
@@ -232,13 +237,15 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
 
-    private void showAddBookDialog() {
+    @Override
+    public void showAddBookDialog() {
         FragmentManager manager = getFragmentManager();
         AddBookDialogFragment dialog = AddBookDialogFragment.newInstance(currentBook, bookStatus);
         dialog.show(manager, DIALOG_ADD);
     }
 
-    private void shareBook() {
+    @Override
+    public void showShareBookChooser() {
         Book bookToShare = dataSource.getSingleBook(currentBookUri);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
