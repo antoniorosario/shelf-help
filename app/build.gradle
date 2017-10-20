@@ -30,17 +30,20 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
-    compile 'com.google.apis:google-api-services-books:v1-rev77-1.21.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.bumptech.glide:glide:4.0.0'
     compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.jakewharton:butterknife:8.7.0'
-    compile 'org.parceler:parceler-api:1.1.9'
-    compile 'frankiesardo:icepick:3.2.0'
-    provided 'frankiesardo:icepick-processor:3.2.0'
 
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
-    annotationProcessor 'org.parceler:parceler:1.1.9'
+    compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+
+    compile 'org.parceler:parceler-api:1.1.9'
+    annotationProcessor 'org.parceler:parceler:1.1.9'
+
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.10.0'
 }

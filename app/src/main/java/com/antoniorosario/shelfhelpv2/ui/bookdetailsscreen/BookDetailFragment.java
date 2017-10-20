@@ -222,7 +222,7 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public void showBook(Book book) {
+    public void showLoadedBook(Book book) {
         subtitleTextView.setText(book.getSubtitle());
         bookTitleTextView.setText(book.getTitle());
         descriptionTextView.setText(book.getDescription());

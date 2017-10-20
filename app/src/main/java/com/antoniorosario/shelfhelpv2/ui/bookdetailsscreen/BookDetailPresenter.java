@@ -23,7 +23,7 @@ public class BookDetailPresenter {
     }
 
     public void loadBook(Book currentBook) {
-        bookDetailView.showBook(currentBook);
+        bookDetailView.showLoadedBook(currentBook);
     }
 
     public void resetBookData() {

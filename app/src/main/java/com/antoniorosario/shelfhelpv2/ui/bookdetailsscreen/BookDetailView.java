@@ -9,6 +9,6 @@ import com.antoniorosario.shelfhelpv2.models.Book;
 public interface BookDetailView {
     void showAddBookDialog();
     void showShareBookChooser();
-    void showBook(Book book);
+    void showLoadedBook(Book book);
     void clearBookData();
 }
