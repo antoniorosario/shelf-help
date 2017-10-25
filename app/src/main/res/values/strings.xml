@@ -19,7 +19,7 @@
     <string name="mark_as_currently_reading">Mark as currently reading</string>
     <string name="mark_as_read">Mark as read</string>
     <string name="select_shelf">Select Shelf</string>
-    <string name="add_bok">Add Book</string>
+    <string name="add_book">Add Book</string>
     <string name="cancel">Cancel</string>
 
     <!--Search screen strings-->
