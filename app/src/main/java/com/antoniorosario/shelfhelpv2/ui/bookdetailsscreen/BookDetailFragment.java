@@ -103,8 +103,7 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
         if (currentBookUri != null) {
             //Set up the UI for a book we selected from our database
             getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
-            String uri = "@drawable/ic_action_share";
-            fab.setImageResource(getResources().getIdentifier(uri, null, getActivity().getPackageName()));
+            fab.setImageResource(R.drawable.ic_action_share);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -115,8 +114,7 @@ public class BookDetailFragment extends Fragment implements LoaderManager.Loader
             //Set up the UI for a book we selected from a search
             bookDetailPresenter.loadBook(currentBook);
 
-            String uri = "@drawable/ic_action_add_book";
-            fab.setImageResource(getResources().getIdentifier(uri, null, getActivity().getPackageName()));
+            fab.setImageResource(R.drawable.ic_action_add_book);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

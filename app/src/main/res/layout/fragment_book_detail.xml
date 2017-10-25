@@ -94,7 +94,7 @@
                     android:id="@+id/publisher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/publisher"
+                    tools:text="@string/publisher"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/font_small"/>
 
@@ -102,7 +102,7 @@
                     android:id="@+id/publishedDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/published_date"
+                    tools:text="@string/published_date"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/font_small"/>
 
@@ -110,7 +110,7 @@
                     android:id="@+id/author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/author"
+                    tools:text="@string/author"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/font_small"/>
 
@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_small"
                     android:layout_marginTop="@dimen/spacing_normal"
-                    android:text="@string/description"
+                    tools:text="@string/description"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/font_small"
                     android:textStyle="bold"/>

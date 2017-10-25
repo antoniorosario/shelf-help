@@ -26,8 +26,6 @@ import com.antoniorosario.shelfhelpv2.R;
 import com.antoniorosario.shelfhelpv2.models.Book;
 import com.antoniorosario.shelfhelpv2.utils.ConnectivityUtils;
 
-import org.parceler.Parcels;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -71,6 +69,8 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         bookSearchAdapter = new BookSearchAdapter(getActivity());
         bookSearchPresenter = new BookSearchPresenter();
         bookSearchPresenter.setView(this);
+
+
     }
 
     @Nullable
@@ -130,9 +130,7 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(QUERY_STRING, query);
-        outState.putParcelable(LIST_OF_BOOKS, Parcels.wrap(bookList));
     }
-
 
     @Override
     public void onDestroy() {
