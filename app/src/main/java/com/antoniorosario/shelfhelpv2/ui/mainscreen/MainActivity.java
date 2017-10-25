@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.nvView) NavigationView nvDrawer;
-    @BindView(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.nav_view) NavigationView nvDrawer;
+    @BindView(R.id.view_pager) ViewPager viewPager;
     @BindView(R.id.tab_layout) TabLayout tabLayout;
 
     private ActionBarDrawerToggle drawerToggle;

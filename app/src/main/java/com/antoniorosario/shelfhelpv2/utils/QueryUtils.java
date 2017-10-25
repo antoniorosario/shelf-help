@@ -1,8 +1,5 @@
 package com.antoniorosario.shelfhelpv2.utils;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.Log;
 

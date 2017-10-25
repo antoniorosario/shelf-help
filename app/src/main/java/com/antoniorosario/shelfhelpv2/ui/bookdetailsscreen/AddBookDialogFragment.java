@@ -63,7 +63,7 @@ public class AddBookDialogFragment extends DialogFragment {
                         }
                     }
                 })
-                .setPositiveButton(getString(R.string.add_bok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.add_book), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         dataSource.addBook(currentBook, bookStatus);

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.antoniorosario.shelfhelpv2.R;
 
+
 class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable divider;
 
