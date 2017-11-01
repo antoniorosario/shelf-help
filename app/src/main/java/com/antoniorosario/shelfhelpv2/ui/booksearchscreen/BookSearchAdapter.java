@@ -94,6 +94,7 @@ public class BookSearchAdapter extends RecyclerView.Adapter<BookSearchAdapter.Bo
             Picasso
                     .with(context)
                     .load(this.book.getThumbnailUrl())
+                    .error(R.drawable.ic_place_holder)
                     .fit()
                     .into(bookCoverImage);
         }

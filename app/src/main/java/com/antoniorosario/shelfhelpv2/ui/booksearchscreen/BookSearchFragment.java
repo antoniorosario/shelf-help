@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.antoniorosario.shelfhelpv2.R;
 import com.antoniorosario.shelfhelpv2.models.Book;
@@ -50,7 +51,6 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
 
     private SearchView searchView;
     private BookSearchAdapter bookSearchAdapter;
-    private Uri.Builder uriBuilder;
     private BookSearchPresenter bookSearchPresenter;
     private String query;
     private List<Book> bookList = Collections.emptyList();
@@ -64,8 +64,6 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
-        Uri baseUri = Uri.parse(BASE_BOOKS_REQUEST_URL);
-        uriBuilder = baseUri.buildUpon();
         bookSearchAdapter = new BookSearchAdapter(getActivity());
         bookSearchPresenter = new BookSearchPresenter();
         bookSearchPresenter.setView(this);
@@ -125,7 +123,6 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         searchView.setOnQueryTextListener(this);
     }
 
-    //TODO Save state of recyclerview and remove screen orientation attribute in manifest
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -140,18 +137,17 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        uriBuilder.appendQueryParameter("q", query);
         // Check whether or not there is an active network connection
         if (ConnectivityUtils.isConnected(getActivity())) {
             // Search submitted with an active connection
             // Fetch the data remotely
-            bookSearchPresenter.executeTask(uriBuilder.toString());
+            bookSearchPresenter.executeQuery(query);
         } else {
             // Search submitted without an active connection
             showOfflineSearchView();
         }
         // Reset SearchView query
-        uriBuilder.clearQuery();
+        this.query = "";
         searchView.clearFocus();
         return true;
     }
@@ -231,5 +227,10 @@ public class BookSearchFragment extends Fragment implements SearchView.OnQueryTe
         searchIcon.setVisibility(View.GONE);
         searchSubtitleTextView.setText("");
         searchTitleTextView.setText("");
+    }
+
+    @Override
+    public void showFailedSearchView() {
+        Toast.makeText(getActivity(), R.string.error_connecting_to_server, Toast.LENGTH_LONG).show();
     }
 }

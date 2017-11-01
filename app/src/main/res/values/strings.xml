@@ -51,4 +51,5 @@
     <string name="books_read">Books Read</string>
     <string name="search_device_is_offline_title">Device is offline</string>
     <string name="search_device_is_offline_subtitle">Make sure Wi-fi or cellular data is turned on.</string>
+    <string name="error_connecting_to_server">Error connecting to server.</string>
 </resources>

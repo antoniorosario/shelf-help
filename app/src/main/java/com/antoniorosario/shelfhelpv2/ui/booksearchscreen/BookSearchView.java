@@ -13,4 +13,6 @@ public interface BookSearchView {
     void showSuccessfulSearchView(List<Book> data);
     void showActiveSearch();
     void showSearchingView();
+    void showFailedSearchView();
+
 }
